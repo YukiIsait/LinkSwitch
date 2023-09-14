@@ -3,11 +3,11 @@
 
 class JunctionPoint {
 public:
-    static void Mount(const std::wstring& junctionPoint, const std::wstring& targetDir);
-    static void Create(const std::wstring& junctionPoint, const std::wstring& targetDir);
-    static void Unmount(const std::wstring& junctionPoint);
-    static void Delete(const std::wstring& junctionPoint);
-    static bool IsJunctionPoint(const std::wstring& path);
+    static void Mount(const std::wstring_view junctionPoint, const std::wstring_view targetDir);
+    static void Create(const std::wstring_view junctionPoint, const std::wstring_view targetDir);
+    static void Unmount(const std::wstring_view junctionPoint);
+    static void Delete(const std::wstring_view junctionPoint);
+    static bool IsJunctionPoint(const std::wstring_view path);
 
 private:
     std::wstring junctionPoint;
@@ -24,9 +24,9 @@ public:
 
     std::wstring& operator*() noexcept;
 
-    void MountFor(const std::wstring& targetDir) const;
-    void CreateFor(const std::wstring& targetDir) const;
+    void MountFor(const std::wstring_view targetDir) const;
+    void CreateFor(const std::wstring_view targetDir) const;
     void Unmount() const;
     void Delete() const;
-    void RemountFor(const std::wstring& targetDir) const;
+    void RemountFor(const std::wstring_view targetDir) const;
 };
