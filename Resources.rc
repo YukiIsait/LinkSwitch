@@ -10,10 +10,10 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "FileDescription", "Link Switcher"
+            VALUE "FileDescription", "A junction point target switching tool."
             VALUE "FileVersion", "1.0.1.0"
             VALUE "LegalCopyright", "Inari Tsubaki"
-            VALUE "ProductName", "LinkSwitcher"
+            VALUE "ProductName", "Link Switch"
             VALUE "ProductVersion", "1.0.1.0"
         END
     END

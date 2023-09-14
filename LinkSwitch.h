@@ -3,14 +3,14 @@
 #include "Profile.h"
 #include <string>
 
-class LinkSwitcher {
+class LinkSwitch {
 private:
     std::wstring base;
     Profile profile;
     JunctionPoint link;
 
 public:
-    explicit LinkSwitcher();
-    explicit LinkSwitcher(std::wstring_view profileName);
+    explicit LinkSwitch();
+    explicit LinkSwitch(std::wstring_view profileName);
     void SwitchTo(std::wstring_view key) const;
 };

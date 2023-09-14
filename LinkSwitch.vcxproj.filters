@@ -21,7 +21,7 @@
     <ClCompile Include="JunctionPoint.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LinkSwitcher.cc">
+    <ClCompile Include="LinkSwitch.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Main.cc">
@@ -47,7 +47,7 @@
     <ClInclude Include="StringUtil.hh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LinkSwitcher.h">
+    <ClInclude Include="LinkSwitch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PathUtil.h">

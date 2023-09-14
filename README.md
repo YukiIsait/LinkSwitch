@@ -1,6 +1,6 @@
-# Link Switcher
+# Link Switch
 
-The Link Switcher allows changing the target of directory links by command-line arguments, such as switching Java versions.
+The Link Switch allows changing the target of directory links by command-line arguments, such as switching Java versions.
 
 ## Usage
 
@@ -14,7 +14,7 @@ D:\Environment\Java
 └─OpenJDK_8.362
 ```
 
-1. Copy `LinkSwitcher.exe` to this directory and rename it to `swj.exe` (or to any name you prefer).
+1. Copy `LinkSwitch.exe` to this directory and rename it to `swj.exe` (or to any name you prefer).
 
 2. Create an empty directory named `CurrentJDK` (or any name you prefer), and add `D:\Environment\Java` and `D:\Environment\Java\CurrentJDK` to the `PATH` environment variable.
 

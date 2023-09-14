@@ -1,10 +1,10 @@
-﻿#include "LinkSwitcher.h"
+﻿#include "LinkSwitch.h"
 #include "Win32Exception.h"
 #include "PathUtil.h"
 
-LinkSwitcher::LinkSwitcher(): LinkSwitcher(PathUtil::ReplaceExtension(PathUtil::GetProgramFileName(), L".ini")) {}
+LinkSwitch::LinkSwitch(): LinkSwitch(PathUtil::ReplaceExtension(PathUtil::GetProgramFileName(), L".ini")) {}
 
-LinkSwitcher::LinkSwitcher(std::wstring_view profileName): base(PathUtil::GetParent(PathUtil::GetProgramFileName())), profile(PathUtil::Combine(base, profileName)), link(PathUtil::Combine(PathUtil::GetParent(PathUtil::GetProgramFileName()), L"Current")) {
+LinkSwitch::LinkSwitch(std::wstring_view profileName): base(PathUtil::GetParent(PathUtil::GetProgramFileName())), profile(PathUtil::Combine(base, profileName)), link(PathUtil::Combine(PathUtil::GetParent(PathUtil::GetProgramFileName()), L"Current")) {
     try {
         base = PathUtil::Combine(base, profile.ReadString(L"App", L"Base"));
     } catch (...) {}
@@ -13,7 +13,7 @@ LinkSwitcher::LinkSwitcher(std::wstring_view profileName): base(PathUtil::GetPar
     } catch (...) {}
 }
 
-void LinkSwitcher::SwitchTo(std::wstring_view key) const {
+void LinkSwitch::SwitchTo(std::wstring_view key) const {
     std::wstring target = PathUtil::Combine(base, profile.ReadString(L"Items", key));
     try {
         link.RemountFor(target);

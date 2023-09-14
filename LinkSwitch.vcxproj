@@ -22,9 +22,9 @@
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{d4e4689d-a856-4195-b7f2-f8edada8a7f8}</ProjectGuid>
-    <RootNamespace>LinkSwitcher</RootNamespace>
+    <RootNamespace>LinkSwitch</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>LinkSwitcher</ProjectName>
+    <ProjectName>LinkSwitch</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -154,7 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="LinkSwitcher.cc" />
+    <ClCompile Include="LinkSwitch.cc" />
     <ClCompile Include="JunctionPointUtil.cc" />
     <ClCompile Include="Main.cc" />
     <ClCompile Include="JunctionPoint.cc" />
@@ -166,7 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="JunctionPoint.h" />
-    <ClInclude Include="LinkSwitcher.h" />
+    <ClInclude Include="LinkSwitch.h" />
     <ClInclude Include="PathUtil.h" />
     <ClInclude Include="Profile.h" />
     <ClInclude Include="Win32Exception.h" />
