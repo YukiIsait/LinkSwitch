@@ -3,14 +3,14 @@
 #include <Windows.h>
 #include <Shlwapi.h>
 
-std::wstring PathUtil::GetParent(const std::wstring& path) {
+std::wstring PathUtil::GetParent(const std::wstring_view path) {
     std::wstring buffer(path);
     Win32Exception::ThrowLastErrorIf(!::PathRemoveFileSpecW(buffer.data()), ERROR_PATH_NOT_FOUND);
     buffer.resize(buffer.find((wchar_t) 0));
     return buffer;
 }
 
-std::wstring PathUtil::GetFullPath(const std::wstring& path) {
+std::wstring PathUtil::GetFullPath(const std::wstring_view path) {
     DWORD bufferSize = ::GetFullPathNameW(path.data(), 0, nullptr, nullptr);
     Win32Exception::ThrowLastErrorIf(bufferSize == 0);
     std::wstring buffer(bufferSize, 0);
@@ -20,13 +20,13 @@ std::wstring PathUtil::GetFullPath(const std::wstring& path) {
     return buffer;
 }
 
-size_t PathUtil::FindExtension(const std::wstring& path) {
+size_t PathUtil::FindExtension(const std::wstring_view path) {
     wchar_t* extension = ::PathFindExtensionW(path.data());
     Win32Exception::ThrowLastErrorIf(!*extension, ERROR_PATH_NOT_FOUND);
     return extension - path.data();
 }
 
-std::wstring PathUtil::Combine(const std::wstring& pathIn, const std::wstring& pathMore) {
+std::wstring PathUtil::Combine(const std::wstring_view pathIn, const std::wstring_view pathMore) {
     std::wstring buffer(MAX_PATH, 0);
     Win32Exception::ThrowLastErrorIf(!::PathCombineW(buffer.data(), pathIn.data(), pathMore.data()));
     buffer.resize(buffer.find((wchar_t) 0));
@@ -41,7 +41,7 @@ std::wstring PathUtil::GetProgramFileName() {
     return buffer;
 }
 
-std::wstring PathUtil::ReplaceExtension(const std::wstring& path, const std::wstring& ext) {
+std::wstring PathUtil::ReplaceExtension(const std::wstring_view path, const std::wstring_view ext) {
     std::wstring buffer(MAX_PATH, 0);
     std::wmemcpy(buffer.data(), path.data(), path.size());
     Win32Exception::ThrowLastErrorIf(!::PathRenameExtensionW(buffer.data(), ext.data()));

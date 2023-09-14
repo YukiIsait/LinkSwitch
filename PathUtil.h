@@ -3,10 +3,10 @@
 
 class PathUtil {
 public:
-    static std::wstring GetParent(const std::wstring& path);
-    static std::wstring GetFullPath(const std::wstring& path);
-    static size_t FindExtension(const std::wstring& path);
-    static std::wstring Combine(const std::wstring& pathIn, const std::wstring& pathMore);
+    static std::wstring GetParent(const std::wstring_view path);
+    static std::wstring GetFullPath(const std::wstring_view path);
+    static size_t FindExtension(const std::wstring_view path);
+    static std::wstring Combine(const std::wstring_view pathIn, const std::wstring_view pathMore);
     static std::wstring GetProgramFileName();
-    static std::wstring ReplaceExtension(const std::wstring& path, const std::wstring& ext);
+    static std::wstring ReplaceExtension(const std::wstring_view path, const std::wstring_view ext);
 };
