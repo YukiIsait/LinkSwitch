@@ -8,7 +8,6 @@ private:
 
 public:
     explicit Win32Exception(uint32_t errorCode) noexcept;
-    virtual ~Win32Exception() noexcept override;
     uint32_t GetErrorCode() const noexcept;
 
     static void ThrowLastError();

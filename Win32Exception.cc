@@ -22,9 +22,6 @@ std::unique_ptr<char, decltype(&::LocalFree)> FormatErrorMessage(uint32_t errorC
 
 Win32Exception::Win32Exception(uint32_t errorCode) noexcept: std::runtime_error(FormatErrorMessage(errorCode).get()), errorCode(errorCode) {}
 
-Win32Exception::~Win32Exception() noexcept {
-}
-
 uint32_t Win32Exception::GetErrorCode() const noexcept {
     return errorCode;
 }
