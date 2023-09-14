@@ -2,7 +2,7 @@
 
 JunctionPoint::JunctionPoint() noexcept {}
 
-JunctionPoint::JunctionPoint(const std::wstring& junctionPoint) noexcept: junctionPoint(junctionPoint) {}
+JunctionPoint::JunctionPoint(std::wstring_view junctionPoint) noexcept: junctionPoint(junctionPoint) {}
 
 JunctionPoint::JunctionPoint(std::wstring&& junctionPoint) noexcept: junctionPoint(std::move(junctionPoint)) {}
 
@@ -30,11 +30,11 @@ std::wstring& JunctionPoint::operator*() noexcept {
     return junctionPoint;
 }
 
-void JunctionPoint::MountFor(const std::wstring_view targetDir) const {
+void JunctionPoint::MountFor(std::wstring_view targetDir) const {
     return JunctionPoint::Mount(junctionPoint, targetDir);
 }
 
-void JunctionPoint::CreateFor(const std::wstring_view targetDir) const {
+void JunctionPoint::CreateFor(std::wstring_view targetDir) const {
     return JunctionPoint::Create(junctionPoint, targetDir);
 }
 
@@ -46,7 +46,7 @@ void JunctionPoint::Delete() const {
     return JunctionPoint::Delete(junctionPoint);
 }
 
-void JunctionPoint::RemountFor(const std::wstring_view targetDir) const {
+void JunctionPoint::RemountFor(std::wstring_view targetDir) const {
     Unmount();
     MountFor(targetDir);
 }

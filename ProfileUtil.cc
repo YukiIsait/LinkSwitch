@@ -3,7 +3,7 @@
 #include "Win32Exception.h"
 #include <Windows.h>
 
-std::wstring Profile::InternalReadString(const std::wstring& fileName, const std::wstring* appName, const std::wstring* keyName) {
+std::wstring Profile::InternalReadString(std::wstring_view fileName, const std::wstring_view* appName, const std::wstring_view* keyName) {
     std::wstring fullFileName = PathUtil::GetFullPath(fileName);
     std::wstring buffer(0x1F, 0);
     for (uint32_t size = 0x20; size < 0x10000; size += 0x20) {
@@ -26,7 +26,7 @@ std::wstring Profile::InternalReadString(const std::wstring& fileName, const std
     return buffer;
 }
 
-std::vector<std::wstring> Profile::InternalReadNames(const std::wstring& fileName, const std::wstring* appName) {
+std::vector<std::wstring> Profile::InternalReadNames(std::wstring_view fileName, const std::wstring_view* appName) {
     std::wstring sections = InternalReadString(fileName, appName, nullptr);
     std::vector<std::wstring> result;
     size_t size = 0;
@@ -39,18 +39,18 @@ std::vector<std::wstring> Profile::InternalReadNames(const std::wstring& fileNam
     return result;
 }
 
-std::vector<std::wstring> Profile::ReadSections(const std::wstring& fileName) {
+std::vector<std::wstring> Profile::ReadSections(std::wstring_view fileName) {
     return InternalReadNames(fileName, nullptr);
 }
 
-std::vector<std::wstring> Profile::ReadKeys(const std::wstring& fileName, const std::wstring& appName) {
+std::vector<std::wstring> Profile::ReadKeys(std::wstring_view fileName, std::wstring_view appName) {
     if (appName.empty()) {
         Win32Exception::ThrowLastError(ERROR_BAD_ARGUMENTS);
     }
     return InternalReadNames(fileName, &appName);
 }
 
-std::wstring Profile::ReadString(const std::wstring& fileName, const std::wstring& appName, const std::wstring& keyName) {
+std::wstring Profile::ReadString(std::wstring_view fileName, std::wstring_view appName, std::wstring_view keyName) {
     if (appName.empty() || keyName.empty() || fileName.empty()) {
         Win32Exception::ThrowLastError(ERROR_BAD_ARGUMENTS);
     }

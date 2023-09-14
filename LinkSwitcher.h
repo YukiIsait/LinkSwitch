@@ -11,6 +11,6 @@ private:
 
 public:
     explicit LinkSwitcher();
-    explicit LinkSwitcher(const std::wstring profileName);
-    void SwitchTo(const std::wstring& key) const;
+    explicit LinkSwitcher(std::wstring_view profileName);
+    void SwitchTo(std::wstring_view key) const;
 };

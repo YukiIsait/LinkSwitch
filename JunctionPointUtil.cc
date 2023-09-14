@@ -18,7 +18,7 @@ struct ReparseDataBuffer {
     } MountPointReparseBuffer;
 };
 
-std::pair<std::unique_ptr<ReparseDataBuffer>, size_t> CreateMountPointReparseDataBuffer(const std::wstring_view substituteName, const std::wstring_view printName) noexcept {
+std::pair<std::unique_ptr<ReparseDataBuffer>, size_t> CreateMountPointReparseDataBuffer(std::wstring_view substituteName, std::wstring_view printName) noexcept {
     size_t substituteNameSize = (substituteName.size() + 1) * sizeof(wchar_t);
     size_t printNameSize = (printName.size() + 1) * sizeof(wchar_t);
     size_t reparseDataBufferSize = UFIELD_OFFSET(ReparseDataBuffer, MountPointReparseBuffer.PathBuffer) + substituteNameSize + printNameSize;
@@ -35,7 +35,7 @@ std::pair<std::unique_ptr<ReparseDataBuffer>, size_t> CreateMountPointReparseDat
     return std::make_pair(std::move(reparseDataBuffer), reparseDataBufferSize);
 }
 
-void JunctionPoint::Mount(const std::wstring_view junctionPoint, const std::wstring_view targetDir) {
+void JunctionPoint::Mount(std::wstring_view junctionPoint, std::wstring_view targetDir) {
     DWORD targetDirFullPathSize = ::GetFullPathNameW(targetDir.data(), 0, nullptr, nullptr);
     Win32Exception::ThrowLastErrorIf(targetDirFullPathSize == 0);
     std::wstring targetDirNtPath(targetDirFullPathSize + 4, 0);
@@ -51,7 +51,7 @@ void JunctionPoint::Mount(const std::wstring_view junctionPoint, const std::wstr
     Win32Exception::ThrowLastErrorIf(!ret);
 }
 
-void JunctionPoint::Create(const std::wstring_view junctionPoint, const std::wstring_view targetDir) {
+void JunctionPoint::Create(std::wstring_view junctionPoint, std::wstring_view targetDir) {
     Win32Exception::ThrowLastErrorIf(!::CreateDirectoryW(junctionPoint.data(), nullptr));
     try {
         Mount(junctionPoint, targetDir);
@@ -61,7 +61,7 @@ void JunctionPoint::Create(const std::wstring_view junctionPoint, const std::wst
     }
 }
 
-void JunctionPoint::Unmount(const std::wstring_view junctionPoint) {
+void JunctionPoint::Unmount(std::wstring_view junctionPoint) {
     ReparseDataBuffer reparseDataBuffer = {
         .ReparseTag = IO_REPARSE_TAG_MOUNT_POINT
     };
@@ -72,12 +72,12 @@ void JunctionPoint::Unmount(const std::wstring_view junctionPoint) {
     Win32Exception::ThrowLastErrorIf(!ret);
 }
 
-void JunctionPoint::Delete(const std::wstring_view junctionPoint) {
+void JunctionPoint::Delete(std::wstring_view junctionPoint) {
     Unmount(junctionPoint);
     ::RemoveDirectoryW(junctionPoint.data());
 }
 
-bool JunctionPoint::IsJunctionPoint(const std::wstring_view path) {
+bool JunctionPoint::IsJunctionPoint(std::wstring_view path) {
     DWORD attributes = ::GetFileAttributesW(path.data());
     Win32Exception::ThrowLastErrorIf(attributes == INVALID_FILE_ATTRIBUTES);
     if ((attributes & (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_REPARSE_POINT)) != (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_REPARSE_POINT)) {
