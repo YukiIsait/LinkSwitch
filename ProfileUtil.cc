@@ -9,7 +9,7 @@ std::wstring Profile::InternalReadString(std::wstring_view fileName, const std::
     for (uint32_t size = 0x20; size < 0x10000; size += 0x20) {
         buffer.resize(static_cast<size_t>(size) - 1);
         uint32_t result = ::GetPrivateProfileStringW(appName ? appName->data() : nullptr, keyName ? keyName->data() : nullptr, nullptr, buffer.data(), size, fullFileName.data());
-        Win32Exception::ThrowLastErrorIfFailed();
+        Win32Exception::ThrowLastErrorIfIs(ERROR_FILE_NOT_FOUND);
         Win32Exception::ThrowLastErrorIf(buffer.empty(), ERROR_BAD_ARGUMENTS);
         if (appName && keyName) {
             if (result == size - 1) {

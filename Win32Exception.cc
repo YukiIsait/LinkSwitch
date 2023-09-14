@@ -47,9 +47,16 @@ void Win32Exception::ThrowLastErrorIf(bool expression, uint32_t errorCode) {
     }
 }
 
+void Win32Exception::ThrowLastErrorIfIs(uint32_t errorCode) {
+    uint32_t lastErrorCode = ::GetLastError();
+    if (lastErrorCode == errorCode) {
+        throw Win32Exception(lastErrorCode);
+    }
+}
+
 void Win32Exception::ThrowLastErrorIfFailed() {
-    uint32_t errorCode = ::GetLastError();
-    if (errorCode != ERROR_SUCCESS) {
-        throw Win32Exception(errorCode);
+    uint32_t lastErrorCode = ::GetLastError();
+    if (lastErrorCode != ERROR_SUCCESS) {
+        throw Win32Exception(lastErrorCode);
     }
 }

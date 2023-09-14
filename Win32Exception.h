@@ -14,5 +14,6 @@ public:
     static void ThrowLastError(uint32_t errorCode);
     static void ThrowLastErrorIf(bool expression);
     static void ThrowLastErrorIf(bool expression, uint32_t errorCode);
+    static void ThrowLastErrorIfIs(uint32_t errorCode);
     static void ThrowLastErrorIfFailed();
 };
