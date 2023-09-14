@@ -1,29 +1,33 @@
 ﻿#include "Win32Exception.h"
 #include <Windows.h>
+#include <memory>
 
-std::string Win32Exception::FormatErrorMessage(uint32_t errorCode) noexcept {
+std::unique_ptr<char, decltype(&::LocalFree)> FormatErrorMessage(uint32_t errorCode) noexcept {
     LPSTR buffer = nullptr;
-    uint32_t size = ::FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_MAX_WIDTH_MASK,
-                                     nullptr,
-                                     errorCode,
-                                     MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT),
-                                     (LPSTR) &buffer,
-                                     0,
-                                     nullptr);
-    if (!size) {
-        return std::string("Unknown Win32Exception.");
+    uint32_t size = ::FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+                                     nullptr, errorCode, MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT), (LPSTR) &buffer, 0, nullptr);
+    if (size) {
+        uint16_t* lineBreak = reinterpret_cast<uint16_t*>(buffer + size - 2);
+        if (*lineBreak == 0x0A0D) {
+            *lineBreak = 0;
+        }
+    } else {
+        buffer = reinterpret_cast<LPSTR>(::LocalAlloc(LMEM_FIXED, 26));
+        if (buffer) {
+            ::wsprintfA(buffer, "Unknown error 0x%08X.", errorCode);
+        }
     }
-    std::string message(buffer, size);
-    message.erase(message.find_last_not_of("\x20\x0D\x0A") + 1);
-    ::LocalFree(buffer);
-    return message;
+    return std::unique_ptr<char, decltype(&::LocalFree)>(buffer, &::LocalFree);
+}
+
+Win32Exception::Win32Exception(uint32_t errorCode) noexcept: std::runtime_error(FormatErrorMessage(errorCode).get()), errorCode(errorCode) {}
+
+Win32Exception::~Win32Exception() noexcept {
 }
 
 uint32_t Win32Exception::GetErrorCode() const noexcept {
     return errorCode;
 }
-
-Win32Exception::Win32Exception(uint32_t errorCode) noexcept: std::runtime_error(FormatErrorMessage(errorCode)), errorCode(errorCode) {}
 
 void Win32Exception::ThrowLastError() {
     throw Win32Exception(::GetLastError());
