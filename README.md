@@ -55,11 +55,13 @@ swj j8
 ```ini
 [App]
 Base=D:\Environment\Python
-Link=D:\Environment\CurrentPython
+Link=CurrentPython
+; Same as Link=D:\Environment\Python\CurrentPython
 
 [Items]
-PY38=Python38
 PY311=E:\Python311
+PY38=Python38
+; Same as PY38=D:\Environment\Python\Python38
 ```
 
 - **App**: `Optional` The configuration of the app.
