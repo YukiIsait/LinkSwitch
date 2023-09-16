@@ -93,7 +93,7 @@ openjdk version "11.0.18" 2023-01-17 LTS
 
 1. 确保环境中存在 CMake 和 Ninja。
 2. 确保环境中存在 MinGW 或已进入安装了 C++ 桌面开发组件的 Visual Studio 开发者命令行。
-3. 在项目目录下执行下列命令。
+3. 在项目目录下执行下列命令：
 
 ```bash
 cmake -GNinja -BBuild
