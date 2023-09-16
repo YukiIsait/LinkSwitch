@@ -12,12 +12,12 @@ Win32Handle::~Win32Handle() noexcept {
     }
 }
 
-void* Win32Handle::operator=(void* handle) noexcept {
-    if (this->handle != nullptr) {
-        ::CloseHandle(this->handle);
+Win32Handle& Win32Handle::operator=(void* newHandle) noexcept {
+    if (handle != nullptr) {
+        ::CloseHandle(handle);
     }
-    this->handle = handle;
-    return handle;
+    handle = newHandle;
+    return *this;
 }
 
 Win32Handle::operator void*() const noexcept {

@@ -9,6 +9,6 @@ public:
     Win32Handle(void* handle) noexcept;
     virtual ~Win32Handle() noexcept;
 
-    void* operator=(void* handle) noexcept;
+    Win32Handle& operator=(void* newHandle) noexcept;
     operator void*() const noexcept;
 };
