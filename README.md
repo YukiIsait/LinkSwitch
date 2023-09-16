@@ -2,6 +2,15 @@
 
 目录链接指向切换工具用于通过命令行快速切换目录链接的指向，例如通过配置文件让它作为 Java 环境版本切换工具。
 
+## 命令行参数
+
+```
+LinkSwitch <key> [profile]
+```
+
+- **key**: `必选` 切换目标的标签，在配置文件中指定。
+- **profile**: `可选` 配置文件路径，如果不指定则使用当前可执行文件所在目录下的同名配置文件。
+
 ## 配置文件
 
 通过下列示例配置文件讲述配置项的作用。
@@ -71,4 +80,22 @@ openjdk version "1.8.0_362"
 > swj 11
 > java -version
 openjdk version "11.0.18" 2023-01-17 LTS
+```
+
+## 编译
+
+### Visual Studio
+
+1. 确保 Visual Studio 安装了 C++ 桌面开发组件。
+2. 打开 `LinkSwitch.sln` 并使用 `Release` 编译。
+
+### CMake
+
+1. 确保环境中存在 CMake 和 Ninja。
+2. 确保环境中存在 MinGW 或已进入安装了 C++ 桌面开发组件的 Visual Studio 开发者命令行。
+3. 在项目目录下执行下列命令。
+
+```bash
+cmake -GNinja -BBuild
+ninja -CBuild
 ```
