@@ -17,7 +17,7 @@ std::unique_ptr<char, decltype(&::LocalFree)> FormatErrorMessage(uint32_t errorC
             ::wsprintfA(buffer, "Unknown error 0x%08X.", errorCode);
         }
     }
-    return std::unique_ptr<char, decltype(&::LocalFree)>(buffer, &::LocalFree);
+    return { buffer, &::LocalFree };
 }
 
 Win32Exception::Win32Exception(uint32_t errorCode) noexcept: std::runtime_error(FormatErrorMessage(errorCode).get()), errorCode(errorCode) {}
