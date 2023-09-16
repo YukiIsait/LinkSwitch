@@ -1,56 +1,10 @@
-# Link Switch
+# 目录链接切换器
 
-The Link Switch allows changing the target of directory links by command-line arguments, such as switching Java versions.
+目录链接切换器用于通过命令行快速切换目录链接的指向，例如通过配置文件让它作为 Java 环境版本切换器。
 
-## Usage
+## 配置文件
 
-In the following steps, the JDK environment located at `D:\Environment\Java` will be used for demonstration purposes.
-
-```
-D:\Environment\Java
-├─OpenJDK_11.0.18
-├─OpenJDK_17.0.6
-├─OpenJDK_19.0.2
-└─OpenJDK_8.362
-```
-
-1. Copy `LinkSwitch.exe` to this directory and rename it to `swj.exe` (or to any name you prefer).
-
-2. Create an empty directory named `CurrentJDK` (or any name you prefer), and add `D:\Environment\Java` and `D:\Environment\Java\CurrentJDK` to the `PATH` environment variable.
-
-3. Create a text file named `swj.ini` (same as Step 1). After these 3 steps, the contents of the directory are as follows:
-
-```
-D:\Environment\Java
-├─OpenJDK_11.0.18
-├─OpenJDK_17.0.6
-├─OpenJDK_19.0.2
-├─OpenJDK_8.362
-├─CurrentJDK
-├─swj.exe
-└─swj.ini
-```
-
-4. Configure the `swj.ini`. The content of the file is as follows:
-
-```ini
-[App]
-Link=CurrentJDK
-
-[Items]
-J8=OpenJDK_8.362
-J11=OpenJDK_11.0.18
-J17=OpenJDK_17.0.6
-J19=OpenJDK_19.0.2
-```
-
-5. To switch to Java 8, run `swj j8` in the command line.
-
-```
-swj j8
-```
-
-## Additional notes
+通过下列示例配置文件讲述配置项的作用。
 
 ```ini
 [App]
@@ -64,8 +18,57 @@ PY38=Python38
 ; Same as PY38=D:\Environment\Python\Python38
 ```
 
-- **App**: `Optional` The configuration of the app.
-    - **Base**: `Optional` The base path for all relative paths. It can be relative to the directory of the executable file.
-    - **Link**: `Optional` The link of directory is created here.
+- **App**: `可选` 切换器配置
+    - **Base**: `可选` 所有相对路径的基础路径，如果是相对路径则是相对于当前可执行文件所在目录的。默认为当前可执行文件所在目录。
+    - **Link**: `可选` 生成的目录链接所在目录。默认为当前可执行文件所在目录下的 `Current` 目录。
 
-- **Items**: `Required` All key-path pairs. The key is used as the command-line argument.
+- **Items**: `必选` 所有标签与路径的键值对，标签用于命令行参数。
+
+## 使用方法
+
+通过下列步骤，将目录链接切换器配置为 Java 环境版本切换器。演示目录为 `D:\Java` 和 `E:\Java`。
+
+```
+D:\Java
+├─OpenJDK_11.0.18
+└─OpenJDK_8.362
+```
+
+```
+E:\Java
+├─OpenJDK_19.0.2
+└─OpenJDK_17.0.6
+```
+
+1. 将 `LinkSwitch.exe` 复制到任意目录并重命名为 `swj.exe`（或任何名字）。
+
+2. 将这个目录加入到环境变量 `PATH` 中（例如 `D:\VersionSwitch`）。
+
+3. 创建 `swj.ini`（与 `swj.exe` 同名），文件内容如下：
+
+```ini
+[App]
+Link=CurrentJDK
+
+[Items]
+8=D:\Java\OpenJDK_8.362
+11=D:\Java\OpenJDK_11.0.18
+17=E:\Java\OpenJDK_17.0.6
+19=E:\Java\OpenJDK_19.0.2
+```
+
+4. 将 `swj.exe` 所在目录下的 `CurrentJDK` 目录（例如 `D:\VersionSwitch\CurrentJDK`）加入到环境变量 `PATH` 中。
+
+5. 在命令行中运行 `swj 8` 即可切换到 Java 8。
+
+```
+> swj 8
+> java -version
+openjdk version "1.8.0_362"
+```
+
+```
+> swj 11
+> java -version
+openjdk version "11.0.18" 2023-01-17 LTS
+```
