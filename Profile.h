@@ -16,10 +16,10 @@ private:
     std::wstring fileName;
 
 public:
-    Profile() noexcept;
+    Profile() noexcept = default;
+    Profile(const Profile& other) noexcept = default;
     Profile(std::wstring_view fileName) noexcept;
     Profile(std::wstring&& fileName) noexcept;
-    Profile(const Profile& other) noexcept;
     Profile(Profile&& other) noexcept;
 
     Profile& operator=(const Profile& other) noexcept;

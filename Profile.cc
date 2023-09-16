@@ -1,12 +1,8 @@
 ﻿#include "Profile.h"
 
-Profile::Profile() noexcept {}
-
 Profile::Profile(std::wstring_view fileName) noexcept: fileName(fileName) {}
 
 Profile::Profile(std::wstring&& fileName) noexcept: fileName(std::move(fileName)) {}
-
-Profile::Profile(const Profile& other) noexcept: fileName(other.fileName) {}
 
 Profile::Profile(Profile&& other) noexcept: fileName(std::move(other.fileName)) {}
 
