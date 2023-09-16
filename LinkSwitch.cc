@@ -1,5 +1,4 @@
 ﻿#include "LinkSwitch.h"
-#include "Win32Exception.h"
 #include "PathUtil.h"
 
 LinkSwitch::LinkSwitch(): LinkSwitch(PathUtil::ReplaceExtension(PathUtil::GetProgramFileName(), L".ini")) {}
