@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <stdexcept>
 #include <string>
+#include <cstdint>
 
 class Win32Exception: public std::runtime_error {
 private:
