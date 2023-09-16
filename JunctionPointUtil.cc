@@ -2,8 +2,8 @@
 #include "Win32Exception.h"
 #include "Win32Handle.h"
 #include <Windows.h>
-#include <Shlwapi.h>
 #include <memory>
+#include <cstring>
 
 struct ReparseDataBuffer {
     DWORD ReparseTag;
@@ -21,10 +21,10 @@ struct ReparseDataBuffer {
 std::pair<std::unique_ptr<ReparseDataBuffer>, size_t> CreateMountPointReparseDataBuffer(std::wstring_view substituteName, std::wstring_view printName) noexcept {
     size_t substituteNameSize = (substituteName.size() + 1) * sizeof(wchar_t);
     size_t printNameSize = (printName.size() + 1) * sizeof(wchar_t);
-    size_t reparseDataBufferSize = UFIELD_OFFSET(ReparseDataBuffer, MountPointReparseBuffer.PathBuffer) + substituteNameSize + printNameSize;
+    size_t reparseDataBufferSize = FIELD_OFFSET(ReparseDataBuffer, MountPointReparseBuffer.PathBuffer) + substituteNameSize + printNameSize;
     std::unique_ptr<ReparseDataBuffer> reparseDataBuffer(reinterpret_cast<ReparseDataBuffer*>(new uint8_t[reparseDataBufferSize]));
     reparseDataBuffer->ReparseTag = IO_REPARSE_TAG_MOUNT_POINT;
-    reparseDataBuffer->ReparseDataLength = static_cast<uint16_t>(reparseDataBufferSize - UFIELD_OFFSET(ReparseDataBuffer, MountPointReparseBuffer));
+    reparseDataBuffer->ReparseDataLength = static_cast<uint16_t>(reparseDataBufferSize - FIELD_OFFSET(ReparseDataBuffer, MountPointReparseBuffer));
     reparseDataBuffer->Reserved = 0;
     reparseDataBuffer->MountPointReparseBuffer.SubstituteNameOffset = 0;
     reparseDataBuffer->MountPointReparseBuffer.SubstituteNameLength = static_cast<uint16_t>(substituteNameSize - sizeof(wchar_t));
@@ -68,7 +68,7 @@ void JunctionPoint::Unmount(std::wstring_view junctionPoint) {
     Win32Handle reparsePoint = ::CreateFileW(junctionPoint.data(), GENERIC_WRITE, 0, nullptr, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT, nullptr);
     Win32Exception::ThrowLastErrorIf(reparsePoint == INVALID_HANDLE_VALUE);
     DWORD bytesReturned;
-    BOOL ret = ::DeviceIoControl(reparsePoint, FSCTL_DELETE_REPARSE_POINT, &reparseDataBuffer, UFIELD_OFFSET(ReparseDataBuffer, MountPointReparseBuffer), nullptr, 0, &bytesReturned, nullptr);
+    BOOL ret = ::DeviceIoControl(reparsePoint, FSCTL_DELETE_REPARSE_POINT, &reparseDataBuffer, FIELD_OFFSET(ReparseDataBuffer, MountPointReparseBuffer), nullptr, 0, &bytesReturned, nullptr);
     Win32Exception::ThrowLastErrorIf(!ret);
 }
 
