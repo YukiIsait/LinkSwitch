@@ -13,10 +13,10 @@ private:
     std::wstring junctionPoint;
 
 public:
-    JunctionPoint() noexcept;
+    JunctionPoint() noexcept = default;
+    JunctionPoint(const JunctionPoint& other) noexcept = default;
     JunctionPoint(std::wstring_view junctionPoint) noexcept;
     JunctionPoint(std::wstring&& junctionPoint) noexcept;
-    JunctionPoint(const JunctionPoint& other) noexcept;
     JunctionPoint(JunctionPoint&& other) noexcept;
 
     JunctionPoint& operator=(const JunctionPoint& other) noexcept;

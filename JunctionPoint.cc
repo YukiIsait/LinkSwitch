@@ -1,12 +1,8 @@
 ﻿#include "JunctionPoint.h"
 
-JunctionPoint::JunctionPoint() noexcept {}
-
 JunctionPoint::JunctionPoint(std::wstring_view junctionPoint) noexcept: junctionPoint(junctionPoint) {}
 
 JunctionPoint::JunctionPoint(std::wstring&& junctionPoint) noexcept: junctionPoint(std::move(junctionPoint)) {}
-
-JunctionPoint::JunctionPoint(const JunctionPoint& other) noexcept: junctionPoint(other.junctionPoint) {}
 
 JunctionPoint::JunctionPoint(JunctionPoint&& other) noexcept: junctionPoint(std::move(other.junctionPoint)) {}
 
