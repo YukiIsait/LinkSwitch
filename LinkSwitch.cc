@@ -21,3 +21,7 @@ void LinkSwitch::SwitchTo(std::wstring_view key) const {
         link.CreateFor(target);
     }
 }
+
+std::vector<std::wstring> LinkSwitch::GetAvailableKeys() const {
+    return profile.ReadKeys(L"Items");
+}

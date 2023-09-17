@@ -5,10 +5,12 @@
 ## 命令行参数
 
 ```
-LinkSwitch <key> [profile]
+LinkSwitch <key|#> [profile]
 ```
 
-- **Key**: `必选` 切换目标的标签，在配置文件中指定。
+- **Key** 或 **#**: `二选一`
+    - **Key**:  切换目标的标签，在配置文件中指定。
+    - **#**: 打印配置文件中的所有可用标签。
 - **Profile**: `可选` 配置文件路径，如果不指定则使用当前可执行文件所在目录下的同名配置文件。
 
 ## 配置文件
@@ -37,13 +39,13 @@ PY38=Python38
 
 通过下列步骤，将目录链接指向切换工具配置为 Java 环境版本切换工具。演示目录为 `D:\Java` 和 `E:\Java`。
 
-```
+```sh
 D:\Java
 ├─OpenJDK_11.0.18
 └─OpenJDK_8.362
 ```
 
-```
+```sh
 E:\Java
 ├─OpenJDK_19.0.2
 └─OpenJDK_17.0.6
@@ -70,13 +72,13 @@ Link=CurrentJDK
 
 5. 在命令行中运行 `swj 8` 即可切换到 Java 8。
 
-```
+```sh
 > swj 8
 > java -version
 openjdk version "1.8.0_362"
 ```
 
-```
+```sh
 > swj 11
 > java -version
 openjdk version "11.0.18" 2023-01-17 LTS
@@ -95,7 +97,7 @@ openjdk version "11.0.18" 2023-01-17 LTS
 2. 确保环境中存在 MinGW 或已进入安装了 C++ 桌面开发组件的 Visual Studio 开发者命令行。
 3. 在项目目录下执行下列命令：
 
-```bash
-cmake -GNinja -BBuild
-ninja -CBuild
+```sh
+cmake -GNinja -Bbld
+ninja -Cbld
 ```
