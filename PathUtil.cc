@@ -47,3 +47,19 @@ std::wstring PathUtil::ReplaceExtension(std::wstring_view path, std::wstring_vie
     Win32Exception::ThrowLastErrorIf(!::PathRenameExtensionW(buffer.data(), ext.data()));
     return buffer;
 }
+
+std::wstring_view PathUtil::GetFileNameWithoutExtension(std::wstring_view filePath)
+{
+    size_t lastSlashPos = filePath.find_last_of(L"/\\");
+    std::wstring_view fileName = filePath.substr(lastSlashPos + 1);
+    size_t lastDotPos = fileName.find_last_of(L".");
+    std::wstring_view fileNameWithoutExtension = fileName.substr(0, lastDotPos);
+    return fileNameWithoutExtension;
+}
+
+std::wstring_view PathUtil::GetFileName(std::wstring_view filePath)
+{
+    size_t lastSlashPos = filePath.find_last_of(L"/\\");
+    std::wstring_view fileName = filePath.substr(lastSlashPos + 1);
+    return fileName;
+}
