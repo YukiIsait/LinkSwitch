@@ -2,27 +2,19 @@
 #include "Win32Exception.h"
 #include "Win32Handle.h"
 #include <Windows.h>
-#include <memory>
 #include <cstring>
+#include <cstdlib>
+#include <memory>
+#include <new>
 
-struct ReparseDataBuffer {
-    DWORD ReparseTag;
-    WORD ReparseDataLength;
-    WORD Reserved;
-    struct {
-        WORD SubstituteNameOffset;
-        WORD SubstituteNameLength;
-        WORD PrintNameOffset;
-        WORD PrintNameLength;
-        WCHAR PathBuffer[1];
-    } MountPointReparseBuffer;
-};
-
-std::pair<std::unique_ptr<ReparseDataBuffer>, size_t> CreateMountPointReparseDataBuffer(std::wstring_view substituteName, std::wstring_view printName) noexcept {
+std::pair<std::unique_ptr<JunctionPoint::ReparseDataBuffer, void (*)(void*)>, size_t> JunctionPoint::ReparseDataBuffer::CreateMountPoint(std::wstring_view substituteName, std::wstring_view printName) {
     size_t substituteNameSize = (substituteName.size() + 1) * sizeof(wchar_t);
     size_t printNameSize = (printName.size() + 1) * sizeof(wchar_t);
     size_t reparseDataBufferSize = FIELD_OFFSET(ReparseDataBuffer, MountPointReparseBuffer.PathBuffer) + substituteNameSize + printNameSize;
-    std::unique_ptr<ReparseDataBuffer> reparseDataBuffer(reinterpret_cast<ReparseDataBuffer*>(new uint8_t[reparseDataBufferSize]));
+    ReparseDataBuffer* reparseDataBuffer = reinterpret_cast<ReparseDataBuffer*>(std::malloc(reparseDataBufferSize));
+    if (reparseDataBuffer == nullptr) {
+        throw std::bad_alloc();
+    }
     reparseDataBuffer->ReparseTag = IO_REPARSE_TAG_MOUNT_POINT;
     reparseDataBuffer->ReparseDataLength = static_cast<uint16_t>(reparseDataBufferSize - FIELD_OFFSET(ReparseDataBuffer, MountPointReparseBuffer));
     reparseDataBuffer->Reserved = 0;
@@ -32,7 +24,7 @@ std::pair<std::unique_ptr<ReparseDataBuffer>, size_t> CreateMountPointReparseDat
     reparseDataBuffer->MountPointReparseBuffer.PrintNameLength = static_cast<uint16_t>(printNameSize - sizeof(wchar_t));
     std::memcpy(reparseDataBuffer->MountPointReparseBuffer.PathBuffer, substituteName.data(), substituteNameSize);
     std::memcpy(reinterpret_cast<uint8_t*>(reparseDataBuffer->MountPointReparseBuffer.PathBuffer) + substituteNameSize, printName.data(), printNameSize);
-    return std::make_pair(std::move(reparseDataBuffer), reparseDataBufferSize);
+    return std::make_pair(std::unique_ptr<ReparseDataBuffer, void (*)(void*)>(reparseDataBuffer, &std::free), reparseDataBufferSize);
 }
 
 void JunctionPoint::Mount(std::wstring_view junctionPoint, std::wstring_view targetDir) {
@@ -45,7 +37,7 @@ void JunctionPoint::Mount(std::wstring_view junctionPoint, std::wstring_view tar
     targetDirNtPath.resize(targetDirNtPath.size() - 1);
     Win32Handle reparsePoint = ::CreateFileW(junctionPoint.data(), GENERIC_WRITE, 0, nullptr, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT, nullptr);
     Win32Exception::ThrowLastErrorIf(reparsePoint == INVALID_HANDLE_VALUE);
-    std::pair<std::unique_ptr<ReparseDataBuffer>, size_t> reparseData = CreateMountPointReparseDataBuffer(targetDirNtPath, L"");
+    std::pair<std::unique_ptr<ReparseDataBuffer, void (*)(void*)>, size_t> reparseData = ReparseDataBuffer::CreateMountPoint(targetDirNtPath, L"");
     DWORD bytesReturned;
     BOOL ret = ::DeviceIoControl(reparsePoint, FSCTL_SET_REPARSE_POINT, reparseData.first.get(), static_cast<DWORD>(reparseData.second), nullptr, 0, &bytesReturned, nullptr);
     Win32Exception::ThrowLastErrorIf(!ret);
