@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <functional>
 #include <string>
 #include <memory>
 #include <cstdint>
@@ -17,7 +18,7 @@ private:
             wchar_t PathBuffer[1];
         } MountPointReparseBuffer;
 
-        static std::pair<std::unique_ptr<ReparseDataBuffer, void (*)(void*)>, size_t> CreateMountPoint(std::wstring_view substituteName, std::wstring_view printName);
+        static std::pair<std::unique_ptr<ReparseDataBuffer, std::function<void(void*)>>, size_t> CreateMountPoint(std::wstring_view substituteName, std::wstring_view printName);
     };
 
 public:
