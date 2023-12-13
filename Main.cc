@@ -1,6 +1,7 @@
 ﻿#include "LinkSwitch.h"
 #include <optional>
 #include <cstdio>
+#include "Utils.cc"
 
 int wmain(int argc, wchar_t** argv) {
     std::optional<LinkSwitch> linkSwitch;
@@ -16,7 +17,12 @@ int wmain(int argc, wchar_t** argv) {
                 wprintf_s(L"Usage: %s <key|#> [profile]\n", argv[0]);
                 return -1;
         }
-        if (argv[1][0] == L'#' && argv[1][1] == 0) {
+        if(argv[1][0] == L'!' && argv[1][1] == 0)
+        {
+            Utils::GeneratePwshModule(linkSwitch->GetAvailableKeys());
+            fputws(L"PowerShell module created successfully!", stdout);
+        }
+        else if (argv[1][0] == L'#' && argv[1][1] == 0) {
             std::vector<std::wstring> availableKeys = linkSwitch->GetAvailableKeys();
             for (size_t i = 0; i < availableKeys.size() - 1; i++) {
                 fputws(availableKeys.at(i).data(), stdout);

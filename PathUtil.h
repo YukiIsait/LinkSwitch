@@ -9,4 +9,6 @@ public:
     static std::wstring Combine(std::wstring_view pathIn, std::wstring_view pathMore);
     static std::wstring GetProgramFileName();
     static std::wstring ReplaceExtension(std::wstring_view path, std::wstring_view ext);
+    static std::wstring_view GetFileNameWithoutExtension(std::wstring_view filePath);
+    static std::wstring_view GetFileName(std::wstring_view filePath);
 };
